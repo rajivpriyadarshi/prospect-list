@@ -373,7 +373,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     flex: 1,
   },
   threadTitle: {
-    fontSize: '16px',
+    fontSize: '14px',
     fontWeight: 700,
     color: '#FFFFFF',
     lineHeight: 1.3,
