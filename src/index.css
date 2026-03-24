@@ -159,12 +159,20 @@ input {
   display: inline-block;
 }
 
+.prospect-row {
+  position: relative;
+}
+
+.prospect-row:has(.networth-tooltip-wrapper:hover) {
+  z-index: 9999;
+}
+
 .networth-tooltip {
   position: absolute;
-  bottom: calc(100% + 8px);
+  top: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%) scale(0.95);
-  background: rgba(20, 20, 20, 0.95);
+  background: rgba(20, 20, 20, 0.98);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -175,28 +183,32 @@ input {
   line-height: 1.5;
   width: 320px;
   max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   opacity: 0;
   visibility: hidden;
   transition: all 0.15s ease;
-  z-index: 100;
+  z-index: 9999;
   pointer-events: none;
 }
 
 .networth-tooltip::after {
   content: '';
   position: absolute;
-  top: 100%;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
-  border-top-color: rgba(20, 20, 20, 0.95);
+  border-bottom-color: rgba(20, 20, 20, 0.98);
 }
 
 .networth-tooltip-wrapper:hover .networth-tooltip {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) scale(1);
+}
+
+.networth-tooltip-wrapper:hover {
+  z-index: 9999;
 }
 
 /* Table row hover states */
