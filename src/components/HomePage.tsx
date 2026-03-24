@@ -131,6 +131,13 @@ const HomePage = () => {
         padding: sidebarCollapsed ? '0' : '20px 12px',
         overflow: sidebarCollapsed ? 'hidden' : 'visible',
       }}>
+        {/* Starfield animation in sidebar */}
+        <div className="stars-container">
+          <div id="stars"></div>
+          <div id="stars2"></div>
+          <div id="stars3"></div>
+        </div>
+
         {/* Logo */}
         <div className="animate-fade-in" style={styles.logoContainer}>
           <img src="/zinc-logo.png" alt="Zinc" style={styles.logoImage} />
@@ -256,6 +263,13 @@ const HomePage = () => {
       }}>
         <div style={styles.gradientOverlay} />
         <div style={styles.stripesOverlay} />
+
+        {/* Starfield animation */}
+        <div className="stars-container" style={styles.starsContainer}>
+          <div id="stars"></div>
+          <div id="stars2"></div>
+          <div id="stars3"></div>
+        </div>
 
         <div style={styles.content}>
           <h1 className="animate-fade-in-up delay-200" style={styles.title}>Find your next prospect</h1>
@@ -437,6 +451,17 @@ const styles: { [key: string]: React.CSSProperties } = {
     mixBlendMode: 'overlay' as const,
     pointerEvents: 'none',
     opacity: 0.6,
+  },
+  starsContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+    pointerEvents: 'none',
+    zIndex: 0,
+    opacity: 0.5,
   },
   content: {
     position: 'relative',
