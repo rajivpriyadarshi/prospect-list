@@ -122,6 +122,7 @@ const ProspectsPage = () => {
   const [skipAnimation] = useState(hasLoadedBefore);
   const [stepsComplete, setStepsComplete] = useState(hasLoadedBefore);
   const [typedReasoning, setTypedReasoning] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
   const isThinking = !skipAnimation && currentStepIndex < thinkingSteps.length;
 
   const threads: Thread[] = [
@@ -295,6 +296,35 @@ const ProspectsPage = () => {
       .slice(0, 2);
   };
 
+  const parseNetWorth = (netWorth: string | undefined): number => {
+    if (!netWorth) return 0;
+    // Extract the first number from strings like "$192.0-$342.0m" or "$1.5bn"
+    const match = netWorth.match(/\$?([\d.]+)/);
+    if (!match) return 0;
+    let value = parseFloat(match[1]);
+    if (netWorth.toLowerCase().includes('bn')) value *= 1000;
+    return value;
+  };
+
+  const handleSortNetWorth = () => {
+    if (sortOrder === null) {
+      setSortOrder('desc');
+    } else if (sortOrder === 'desc') {
+      setSortOrder('asc');
+    } else {
+      setSortOrder(null);
+    }
+  };
+
+  const getSortedProspects = () => {
+    if (sortOrder === null) return visibleProspects;
+    return [...visibleProspects].sort((a, b) => {
+      const aVal = parseNetWorth(a.NetWorth);
+      const bVal = parseNetWorth(b.NetWorth);
+      return sortOrder === 'desc' ? bVal - aVal : aVal - bVal;
+    });
+  };
+
   const getAvatarColor = (name: string) => {
     const colors = [
       '#6366F1', '#8B5CF6', '#EC4899', '#EF4444', '#F59E0B',
@@ -302,6 +332,82 @@ const ProspectsPage = () => {
     ];
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
+  };
+
+  const formatReasoning = (reasoning: string) => {
+    // Extract key information using regex
+    const tierMatch = reasoning.match(/Tier \d+/i);
+    const companyTypeMatch = reasoning.match(/(?:Tier \d+ )([\w\s\/\-]+?)(?= company| with)/i);
+    const founderMatch = reasoning.match(/(\d+) founder/i);
+    const ownershipMatch = reasoning.match(/(\d+\.?\d*%?-?\d*\.?\d*%?) (?:and \d+\.?\d*%?-?\d*\.?\d*%? )?(?:diluted|effective)/i);
+    const liquidityMatch = reasoning.match(/(\d+%-?\d*%?) liquidity realization/i);
+    const valuationMatch = reasoning.match(/\$[\d.]+-?\$?[\d.]*\s*(?:bn|billion)/gi);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {/* Header with tier badge */}
+        {tierMatch && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
+              background: 'rgba(130, 254, 214, 0.15)',
+              color: '#82fed6',
+              padding: '2px 8px',
+              borderRadius: '4px',
+              fontSize: '10px',
+              fontWeight: 600,
+              letterSpacing: '0.5px'
+            }}>
+              {tierMatch[0].toUpperCase()}
+            </span>
+            {companyTypeMatch && (
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px' }}>
+                {companyTypeMatch[1].trim()}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Key metrics row */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+          {founderMatch && (
+            <div style={{ fontSize: '11px' }}>
+              <span style={{ color: 'rgba(255,255,255,0.4)' }}>Founders: </span>
+              <span style={{ color: 'rgba(255,255,255,0.8)' }}>{founderMatch[1]}</span>
+            </div>
+          )}
+          {ownershipMatch && (
+            <div style={{ fontSize: '11px' }}>
+              <span style={{ color: 'rgba(255,255,255,0.4)' }}>Ownership: </span>
+              <span style={{ color: 'rgba(255,255,255,0.8)' }}>{ownershipMatch[1]}</span>
+            </div>
+          )}
+          {liquidityMatch && (
+            <div style={{ fontSize: '11px' }}>
+              <span style={{ color: 'rgba(255,255,255,0.4)' }}>Liquidity: </span>
+              <span style={{ color: 'rgba(255,255,255,0.8)' }}>{liquidityMatch[1]}</span>
+            </div>
+          )}
+          {valuationMatch && (
+            <div style={{ fontSize: '11px' }}>
+              <span style={{ color: 'rgba(255,255,255,0.4)' }}>Valuation: </span>
+              <span style={{ color: '#82fed6', fontWeight: 500 }}>{valuationMatch[0]}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Full description */}
+        <div style={{
+          marginTop: '4px',
+          paddingTop: '10px',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
+          fontSize: '11px',
+          color: 'rgba(255,255,255,0.6)',
+          lineHeight: 1.6
+        }}>
+          {reasoning}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -540,13 +646,35 @@ const ProspectsPage = () => {
                 <th style={{ ...styles.th, width: '338px' }}>PERSON</th>
                 <th style={{ ...styles.th, width: '260px' }}>COMPANY</th>
                 <th style={{ ...styles.th, width: '208px' }}>SECTOR</th>
-                <th style={{ ...styles.th, width: '208px' }}>NET-WORTH</th>
+                <th
+                  style={{ ...styles.th, width: '208px', cursor: 'pointer', userSelect: 'none' }}
+                  onClick={handleSortNetWorth}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    NET-WORTH
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={sortOrder ? '#82fed6' : 'currentColor'}
+                      strokeWidth="2"
+                      style={{
+                        opacity: sortOrder ? 1 : 0.5,
+                        transform: sortOrder === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <path d="M12 5v14M5 12l7-7 7 7"/>
+                    </svg>
+                  </span>
+                </th>
                 <th style={{ ...styles.th, width: '546px' }}>LIQUIDITY SIGNAL</th>
                 <th style={{ ...styles.th, width: '156px' }}>LINKEDIN</th>
               </tr>
             </thead>
             <tbody>
-              {visibleProspects.map((prospect, index) => (
+              {getSortedProspects().map((prospect, index) => (
                 <tr
                 key={index}
                 className="prospect-row row-animate"
@@ -579,7 +707,9 @@ const ProspectsPage = () => {
                     <div className="networth-tooltip-wrapper">
                       <span style={styles.netWorth}>{prospect.NetWorth || '—'}</span>
                       {prospect.Reasoning && (
-                        <div className="networth-tooltip">{prospect.Reasoning}</div>
+                        <div className="networth-tooltip">
+                          {formatReasoning(prospect.Reasoning)}
+                        </div>
                       )}
                     </div>
                   </td>
