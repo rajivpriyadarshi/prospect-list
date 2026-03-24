@@ -474,12 +474,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '40px 20px',
   },
   title: {
-    fontSize: '58px',
+    fontSize: '64px',
     fontWeight: 500,
     color: '#FFFFFF',
     marginBottom: '40px',
     textAlign: 'center',
-    letterSpacing: '-1px',
+    letterSpacing: '-3px',
   },
   searchContainer: {
     display: 'flex',
@@ -491,6 +491,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     maxWidth: '580px',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     marginBottom: '40px',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
   },
   searchInput: {
     flex: 1,
@@ -534,6 +536,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     flexDirection: 'column',
     gap: '10px',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
   },
   suggestionLabel: {
     fontSize: '11px',
