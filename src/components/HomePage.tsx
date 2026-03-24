@@ -543,7 +543,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     textTransform: 'uppercase',
   },
   suggestionText: {
-    fontSize: '14px',
+    fontSize: '12px',
     fontWeight: 400,
     color: '#FFFFFF',
     lineHeight: 1.5,
