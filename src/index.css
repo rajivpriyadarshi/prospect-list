@@ -153,6 +153,52 @@ input {
 
 /* ===== LIQUID GLASS DESIGN SYSTEM ===== */
 
+/* Net-worth tooltip */
+.networth-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.networth-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  width: 320px;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.15s ease;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.networth-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(20, 20, 20, 0.95);
+}
+
+.networth-tooltip-wrapper:hover .networth-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+
 /* Table row hover states */
 .prospect-row {
   transition: all 0.2s ease;
@@ -186,8 +232,9 @@ input {
 
 /* Thread item glass effect */
 .thread-item {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  transform-origin: center center;
 }
 
 .thread-item:hover {
@@ -195,7 +242,12 @@ input {
   border-color: rgba(255, 255, 255, 0.15) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
               inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transform: translateY(-1px);
+  transform: scale(0.98) translateY(1px);
+}
+
+.thread-item:active {
+  transform: scale(0.95);
+  transition: all 0.1s ease;
 }
 
 /* Delete button hover */
@@ -243,8 +295,9 @@ input {
 .suggestion-card {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  transform-origin: center center;
 }
 
 .suggestion-card:hover {
@@ -252,7 +305,12 @@ input {
   border-color: rgba(255, 255, 255, 0.2) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
               inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
+  transform: scale(0.97) translateY(2px);
+}
+
+.suggestion-card:active {
+  transform: scale(0.94);
+  transition: all 0.1s ease;
 }
 
 /* Search bar glass effect */

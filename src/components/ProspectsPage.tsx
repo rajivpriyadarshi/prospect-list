@@ -541,14 +541,18 @@ const ProspectsPage = () => {
                 <th style={{ ...styles.th, width: '260px' }}>COMPANY</th>
                 <th style={{ ...styles.th, width: '208px' }}>SECTOR</th>
                 <th style={{ ...styles.th, width: '208px' }}>NET-WORTH</th>
-                <th style={{ ...styles.th, width: '494px' }}>REASONING</th>
                 <th style={{ ...styles.th, width: '546px' }}>LIQUIDITY SIGNAL</th>
                 <th style={{ ...styles.th, width: '156px' }}>LINKEDIN</th>
               </tr>
             </thead>
             <tbody>
               {visibleProspects.map((prospect, index) => (
-                <tr key={index} className="prospect-row row-animate" style={styles.row}>
+                <tr
+                key={index}
+                className="prospect-row row-animate"
+                style={{ ...styles.row, cursor: 'pointer' }}
+                onClick={() => prospect.LinkedIn && window.open(prospect.LinkedIn, '_blank')}
+              >
                   <td style={styles.td}>
                     <div style={styles.prospectCell}>
                       <div
@@ -572,10 +576,12 @@ const ProspectsPage = () => {
                     <span style={styles.sector}>{prospect.Sector}</span>
                   </td>
                   <td style={styles.td}>
-                    <span style={styles.netWorth}>{prospect.NetWorth || '—'}</span>
-                  </td>
-                  <td style={styles.td}>
-                    <span style={styles.reasoning}>{prospect.Reasoning || '—'}</span>
+                    <div className="networth-tooltip-wrapper">
+                      <span style={styles.netWorth}>{prospect.NetWorth || '—'}</span>
+                      {prospect.Reasoning && (
+                        <div className="networth-tooltip">{prospect.Reasoning}</div>
+                      )}
+                    </div>
                   </td>
                   <td style={styles.td}>
                     <span style={styles.liquiditySignal}>{prospect['Liquidity Signal']}</span>
@@ -616,9 +622,6 @@ const ProspectsPage = () => {
                       </td>
                       <td style={styles.td}>
                         <div className="shimmer" style={styles.shimmerNetWorth} />
-                      </td>
-                      <td style={styles.td}>
-                        <div className="shimmer" style={styles.shimmerReasoning} />
                       </td>
                       <td style={styles.td}>
                         <div className="shimmer" style={styles.shimmerSignal} />
