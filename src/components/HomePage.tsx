@@ -132,17 +132,17 @@ const HomePage = () => {
         overflow: sidebarCollapsed ? 'hidden' : 'visible',
       }}>
         {/* Logo */}
-        <div style={styles.logoContainer}>
+        <div className="animate-fade-in" style={styles.logoContainer}>
           <img src="/zinc-logo.png" alt="Zinc" style={styles.logoImage} />
           <span style={styles.logoText}>Zinc</span>
         </div>
 
         {/* Thread Items */}
         <div style={styles.threadList}>
-          {threads.filter(t => !deletedThreads.includes(t.id)).map((thread) => (
+          {threads.filter(t => !deletedThreads.includes(t.id)).map((thread, index) => (
             <button
               key={thread.id}
-              className="thread-item"
+              className={`thread-item animate-slide-in-left delay-${(index + 1) * 100}`}
               style={styles.threadItem}
               onClick={thread.id === 1 ? handleThreadClick : () => handleSavedSearchClick(thread.title)}
               onMouseEnter={() => setHoveredThreadId(thread.id)}
@@ -184,10 +184,10 @@ const HomePage = () => {
           ))}
 
           {/* Saved Searches */}
-          {savedSearches.map((search) => (
+          {savedSearches.map((search, index) => (
             <button
               key={search.id}
-              className="thread-item"
+              className={`thread-item animate-slide-in-left delay-${(index + 4) * 100}`}
               style={styles.threadItem}
               onClick={() => handleSavedSearchClick(search.query)}
               onMouseEnter={() => setHoveredSearchId(search.id)}
@@ -258,9 +258,9 @@ const HomePage = () => {
         <div style={styles.stripesOverlay} />
 
         <div style={styles.content}>
-          <h1 style={styles.title}>Find your next prospect</h1>
+          <h1 className="animate-fade-in-up delay-200" style={styles.title}>Find your next prospect</h1>
 
-          <div className="search-container" style={styles.searchContainer}>
+          <div className="search-container animate-fade-in-up delay-300" style={styles.searchContainer}>
             <input
               type="text"
               placeholder="Search for your next prospect"
@@ -280,7 +280,7 @@ const HomePage = () => {
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
-                className="suggestion-card"
+                className={`suggestion-card animate-scale-in delay-${(index + 4) * 100}`}
                 onClick={() => handleSuggestionClick(suggestion.text)}
                 style={styles.suggestionCard}
               >
